@@ -2,8 +2,6 @@
 
 Download [Docker Desktop](https://docs.docker.com/get-docker/)
 
-*Make sure you're in with ```$ docker login```*
-
 From the command line, download the Docker image for Redis:
 
 ```$ docker pull redis```
