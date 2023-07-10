@@ -46,7 +46,7 @@ def update_randomly(db) -> None:
         update_info(db, random_id, new_info, random_attribute)
     # updates given attribute with random value
     else:
-        another_rand = randint(0, 5) if random_attribute == "relationship" else randint(0, 14)
+        another_rand = randint(0, 2) if random_attribute == "relationship" else randint(0, 14)
         update_info(db, random_id, options[random_attribute][another_rand], random_attribute)
     
 # displays id & info of people
