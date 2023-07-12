@@ -8,7 +8,8 @@ def main() -> None:
         )
     
     topics = [
-        "info",
+        "first_name",
+        "last_name",
         "email",
         "marital_status",
         "relationship",
@@ -22,7 +23,7 @@ def main() -> None:
     # listens for messages that are in one of subscribed channels
     for message in sub.listen():
         print(message['channel'], end=": ")
-        print(message['data'])
+        print(message)
 
 if __name__ == "__main__":
     main()

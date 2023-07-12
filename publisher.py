@@ -2,17 +2,16 @@ import redis
 import json
 import time
 from random import randint
-from assets.constants import *
-from assets.people import *
+from constants import *
 
 KEY_INDEX = '0'
 
 # inserts a person's information
-def insert_info(db, data) -> None:
+def insert_info(db, data):
     print("Inserting")
     p = db.pipeline()
     json_data = json.dumps(data)
-    db.publish('inserting', json_data)
+    db.publish('insert', json_data)
     p.multi()
     db.incr(KEY_INDEX)
     id = int(db.get(KEY_INDEX))
@@ -20,7 +19,7 @@ def insert_info(db, data) -> None:
     p.execute()
 
 # updates info of person
-def update_info(db, id, data, column=None) -> None:
+def update_info(db, id, data, column=None):
     print("Updating")
     json_data = json.dumps(data)
     db.publish(f'{column}', json_data)
@@ -33,8 +32,8 @@ def update_info(db, id, data, column=None) -> None:
         db.json().set(id, f"{path}", data)
 
 # to test
-def update_randomly(db) -> None:
-    random_id = randint(1, int(db.get(KEY_INDEX))) # retrieve random person
+def update_randomly(db):
+    random_id = randint(1, db.dbsize()) # retrieve random person
     random_attribute = to_change[randint(0, 5)] # retrieve random attribute to update
 
     # updates both "relationship" and "spouse" components
@@ -50,8 +49,8 @@ def update_randomly(db) -> None:
         update_info(db, random_id, options[random_attribute][another_rand], random_attribute)
     
 # displays id & info of people
-def read_info(db, column=None) -> None:
-    length = int(db.get(KEY_INDEX)) # get length of database
+def read_info(db, column=None):
+    length = db.dbsize()-1
 
     # reads all info of people
     if not column: 
@@ -82,7 +81,6 @@ def main() -> None:
         # inserts people into given database
         for person in people:
             insert_info(r, person)
-            time.sleep(1)
     
         # reads all info of people
         read_info(r)
@@ -90,7 +88,6 @@ def main() -> None:
         # updates a random characteristic of a random person
         update_randomly(r)
         
-        # to slow things down
         time.sleep(5)
     
 if __name__ == "__main__":
